@@ -10,5 +10,6 @@ public interface IBookService {
 	public abstract Book removeBooks(int id);
 	public abstract List<Book> getBooksByTitle(String title);
 	public abstract List<Book> getBooksByAuthor(String author);
+	public abstract List<Book> allBooks();
 
 }

@@ -44,12 +44,11 @@ public class ShoppingCart{
 		super();
 	}
 
-	public ShoppingCart(Customer customer, Book book, int quantity, int totalPrice) {
+	public ShoppingCart(Customer customer, Book book, int quantity) {
 		super();
 		this.customer = customer;
 		this.book = book;
 		this.quantity = quantity;
-		this.totalPrice = totalPrice;
 	}
 
 	public int getCartId() {

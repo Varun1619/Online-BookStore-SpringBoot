@@ -62,4 +62,14 @@ public class BookController {
 		return response;
 	}
 
+	@RequestMapping(value="/all-books",method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<List<Book>> allBooks()
+	{
+		List<Book> books = bookService.allBooks();
+		HttpStatus status = HttpStatus.OK;
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Message", "Books displayed successfully!");
+		ResponseEntity<List<Book>> response = new ResponseEntity<>(books, headers, status);
+		return response;
+	}
 }

@@ -74,4 +74,10 @@ public class BookService implements IBookService{
 		}
 	}
 
+	@Override
+	public List<Book> allBooks() {
+		// TODO Auto-generated method stub
+		return bookRepo.findAll();
+	}
+
 }

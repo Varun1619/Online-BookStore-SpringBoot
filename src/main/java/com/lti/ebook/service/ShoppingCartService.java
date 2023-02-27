@@ -8,8 +8,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.lti.ebook.model.Book;
 import com.lti.ebook.model.OrderHistory;
 import com.lti.ebook.model.ShoppingCart;
+import com.lti.ebook.repository.BookRepository;
 import com.lti.ebook.repository.OrderHistoryRepository;
 import com.lti.ebook.repository.ShoppingCartRepository;
 
@@ -23,9 +26,14 @@ public class ShoppingCartService implements IShoppingCartService{
 	@Autowired
 	OrderHistoryRepository OrderHistoryRepo;
 	
+	@Autowired
+	BookRepository bookRepo;
+	
 	@Override
 	public ShoppingCart addToCart(ShoppingCart cart) {
 		// TODO Auto-generated method stub
+		int total=cart.getQuantity()*cart.getBook().getPrice();
+		cart.setTotalPrice(total);
 		return ShoppingCartRepo.save(cart);
 	}
 
@@ -38,31 +46,25 @@ public class ShoppingCartService implements IShoppingCartService{
 		    LOG.warn(message);
 		    throw new RuntimeException(message);
 		}
-		else
+		else if(cart.getQuantity()==0)
 		{
-			Optional<ShoppingCart> bookInCart=ShoppingCartRepo.findByCustomer_customerIdAndBook_bookId(cart.getCustomer().getCustomerId(), cart.getBook().getBookId());
-			if(bookInCart.isPresent())
-				cart.setCartId(bookInCart.get().getCartId());
-		     return ShoppingCartRepo.save(cart);	
-		}
-	}
-
-	@Override
-	public ShoppingCart removeFromCart(int id) {
-		// TODO Auto-generated method stub
-		Optional<ShoppingCart> cart=ShoppingCartRepo.findById(id);
-		if(cart.isEmpty())
-		{
-			String message="cart with "+id+" not found ";
+			ShoppingCartRepo.delete(cart);
+			String message="cart item deleted";
 			LOG.warn(message);
 			throw new RuntimeException(message);
 		}
 		else
 		{
-			ShoppingCartRepo.deleteById(id);
-		    return cart.get();
+			Optional<ShoppingCart> bookInCart=ShoppingCartRepo.findByCustomer_customerIdAndBook_bookId(cart.getCustomer().getCustomerId(), cart.getBook().getBookId());
+			if(bookInCart.isPresent())
+			{
+				cart.setCartId(bookInCart.get().getCartId());
+				cart.setTotalPrice(cart.getQuantity()*cart.getBook().getPrice());
+			}	
+		     return ShoppingCartRepo.save(cart);
 		}
 	}
+
 
 	@Override
 	public OrderHistory checkOut(List<ShoppingCart> cart) {
@@ -71,7 +73,19 @@ public class ShoppingCartService implements IShoppingCartService{
 		for(ShoppingCart item:cart)
 		{
 			total+=item.getTotalPrice();
+			ShoppingCartRepo.delete(item);
+			Book book=bookRepo.findById(item.getBook().getBookId()).get();
+			if(item.getQuantity()<=book.getAvailability())
+			book.setAvailability(book.getAvailability()-item.getQuantity());
+			else
+			{
+			String message="Need exceeds availability";
+			LOG.warn(message);
+			throw new RuntimeException(message);
+			}
+				
 		}
+		
 		OrderHistory order=new OrderHistory(cart,new Date(),total);
 		OrderHistoryRepo.save(order);
 		return null;
