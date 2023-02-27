@@ -13,5 +13,7 @@ import com.lti.ebook.model.Book;
 public interface BookRepository extends JpaRepository<Book, Integer>{
 	
 	public abstract Optional<List<Book>> findByTitleContaining(String title);
+	public abstract Optional<List<Book>> findByAuthorContaining(String author);
+	
 
 }
