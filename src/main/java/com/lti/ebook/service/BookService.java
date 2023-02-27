@@ -37,7 +37,7 @@ public class BookService implements IBookService{
 
 	@Override
 	public List<Book> getBooksByAuthor(String author) {
-Optional<List<Book>> books=bookRepo.findByAuthorContaining(author);
+        Optional<List<Book>> books=bookRepo.findByAuthorContaining(author);
 		
 		if(books.isEmpty())
 		{
@@ -72,6 +72,12 @@ Optional<List<Book>> books=bookRepo.findByAuthorContaining(author);
 		bookRepo.deleteById(id);
 		return book.get();
 		}
+	}
+
+	@Override
+	public List<Book> allBooks() {
+		// TODO Auto-generated method stub
+		return bookRepo.findAll();
 	}
 
 }
