@@ -10,12 +10,15 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name="shopping_cart")
 public class ShoppingCart{
+
 	
 	@Id
 	@GenericGenerator(name="cart_seq",strategy="increment")
@@ -23,14 +26,12 @@ public class ShoppingCart{
 	@Column(name="cart_id")
 	private int cartId;
 
-	@JoinColumn(name="customer_id", referencedColumnName="id")
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH})
+	@ManyToOne
+	@JoinColumn(name="customer_id")
 	private Customer customer;
 	
-	@JoinColumn(name="book_id", referencedColumnName="id")
-	@ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.DETACH, CascadeType.PERSIST,
-			CascadeType.MERGE, CascadeType.REFRESH})	
+	@ManyToOne
+	@JoinColumn(name="book_id")
 	private Book book;
 	
 	@Column(name = "quantity")
@@ -100,4 +101,5 @@ public class ShoppingCart{
 	
 
 	
+
 }
