@@ -14,8 +14,8 @@ import jakarta.persistence.Table;
 public class Customer {
 	
 	@Id
-	@GenericGenerator(name="user_seq",strategy="increment")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="user_seq")
+	@GenericGenerator(name="customer_seq",strategy="increment")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE,generator="customer_seq")
 	@Column(name="customer_id")
 	private int customerId;
 	
@@ -29,12 +29,14 @@ public class Customer {
 	private String billingAddress;
 	@Column(name="phone_number")
 	private long phoneNumber;
+	@Column(name="email")
+	private String email;
 	public Customer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	public Customer(int customerId, String customerName, String password, String shippingAddress, String billingAddress,
-			long phoneNumber) {
+			long phoneNumber,String email) {
 		super();
 		this.customerId = customerId;
 		this.customerName = customerName;
@@ -42,6 +44,7 @@ public class Customer {
 		this.shippingAddress = shippingAddress;
 		this.billingAddress = billingAddress;
 		this.phoneNumber = phoneNumber;
+		this.email=email;
 	}
 	public int getCustomerId() {
 		return customerId;
@@ -49,11 +52,11 @@ public class Customer {
 	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
-	public String getUserName() {
+	public String getCustomerName() {
 		return customerName;
 	}
-	public void setUserName(String userName) {
-		this.customerName = userName;
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 	public String getPassword() {
 		return password;
@@ -79,11 +82,20 @@ public class Customer {
 	public void setPhoneNumber(long phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
 	@Override
 	public String toString() {
-		return "Users [userId=" + userId + ", userName=" + userName + ", password=" + password + ", shippingAddress="
-				+ shippingAddress + ", billingAddress=" + billingAddress + ", phoneNumber=" + phoneNumber + "]";
+		return "Customer [customerId=" + customerId + ", customerName=" + customerName + ", password=" + password
+				+ ", shippingAddress=" + shippingAddress + ", billingAddress=" + billingAddress + ", phoneNumber="
+				+ phoneNumber + ", email=" + email + "]";
 	}
+	
 	
 	
 	
